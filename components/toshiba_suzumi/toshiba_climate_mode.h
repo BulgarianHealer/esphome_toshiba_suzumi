@@ -28,22 +28,6 @@ static const std::string &SPECIAL_MODE_SLEEP = "Sleep";
 static const std::string &SPECIAL_MODE_FLOOR = "Floor";
 static const std::string &SPECIAL_MODE_COMFORT = "Comfort";
 
-// New air quality mode strings
-static const std::string &AIR_QUALITY_OFF = "Off";
-static const std::string &AIR_QUALITY_ION = "Ion";
-static const std::string &AIR_QUALITY_PURE = "Pure";
-static const std::string &AIR_QUALITY_AUTO = "Auto";
-
-// Display brightness strings
-static const std::string &DISPLAY_OFF = "Off";
-static const std::string &DISPLAY_DIM = "Dim";
-static const std::string &DISPLAY_BRIGHT = "Bright";
-
-// Dry level strings
-static const std::string &DRY_LEVEL_LOW = "Low";
-static const std::string &DRY_LEVEL_MEDIUM = "Medium";
-static const std::string &DRY_LEVEL_HIGH = "High";
-
 // codes as reverse engineered from Toshiba AC communication with original Wifi module.
 enum class MODE { HEAT_COOL = 65, COOL = 66, HEAT = 67, DRY = 68, FAN_ONLY = 69 };
 enum class FAN {
@@ -73,12 +57,6 @@ enum SPECIAL_MODE {
   COMFORT = 7
 };
 
-// New enums for additional features
-enum class AIR_QUALITY_MODE { OFF = 49, ION = 50, PURE = 51, AUTO = 65 };
-enum class DISPLAY_BRIGHTNESS { OFF = 49, DIM = 50, BRIGHT = 51 };
-enum class DRY_LEVEL { LOW = 49, MEDIUM = 50, HIGH = 51 };
-enum class TIMER_TYPE { OFF_TIMER = 0, ON_TIMER = 1, SLEEP_TIMER = 2 };
-
 enum class ToshibaCommandType : uint8_t {
   HANDSHAKE = 0,  // dummy command to handle all handshake requests
   DELAY = 1, // dummy command to issue a delay in communication
@@ -91,53 +69,8 @@ enum class ToshibaCommandType : uint8_t {
   TARGET_TEMP = 179,
   ROOM_TEMP = 187,
   OUTDOOR_TEMP = 190,
-  
-  // Timer functions
-  ON_TIMER = 192,
-  OFF_TIMER = 193,
-  SLEEP_TIMER = 194,
-  WEEKLY_TIMER = 195,
-  
-  // Air quality features
-  ION_MODE = 196,
-  SELF_CLEAN = 197,
-  FILTER_RESET = 198,
-  PURE_MODE = 199,
-  AIR_QUALITY = 200,
-  
-  // Advanced comfort functions
-  I_FEEL = 201,
-  FOLLOW_ME = 202,
-  TURBO_MODE = 203,
-  AUTO_RESTART = 204,
-  ENERGY_SAVE = 205,
-  
-  // Display & sound control
-  DISPLAY_BRIGHTNESS = 206,
-  BEEP_CONTROL = 207,
-  TEMP_UNIT = 208,
-  CLOCK_SET = 209,
-  
-  // Enhanced climate functions
-  FEEL_TEMPERATURE = 210,
-  DUAL_SETPOINT = 211,
-  INTELLIGENT_AUTO = 212,
-  DRY_LEVEL = 213,
-  
-  // Additional features
-  FILTER_TIME = 214,
-  OPERATING_HOURS = 215,
-  ERROR_CODE = 216,
-  
   WIFI_LED = 223,
   SPECIAL_MODE = 247,
-};
-
-// Timer structure
-struct TimerSettings {
-  uint8_t hours;
-  uint8_t minutes;
-  bool enabled;
 };
 
 const MODE ClimateModeToInt(climate::ClimateMode mode);
@@ -156,16 +89,6 @@ const std::string IntToPowerLevel(PWR_LEVEL mode);
 
 const optional<SPECIAL_MODE> SpecialModeToInt(const std::string &mode);
 const std::string IntToSpecialMode(SPECIAL_MODE mode);
-
-// New conversion functions
-const optional<AIR_QUALITY_MODE> StringToAirQualityMode(const std::string &mode);
-const std::string IntToAirQualityMode(AIR_QUALITY_MODE mode);
-
-const optional<DISPLAY_BRIGHTNESS> StringToDisplayBrightness(const std::string &mode);
-const std::string IntToDisplayBrightness(DISPLAY_BRIGHTNESS mode);
-
-const optional<DRY_LEVEL> StringToDryLevel(const std::string &mode);
-const std::string IntToDryLevel(DRY_LEVEL mode);
 
 }  // namespace toshiba_suzumi
 }  // namespace esphome
