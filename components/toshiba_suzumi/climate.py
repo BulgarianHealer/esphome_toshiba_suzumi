@@ -8,15 +8,6 @@ from esphome.const import (
     DEVICE_CLASS_TEMPERATURE
 )
 
-# ---------------------------------------------------------------------------
-# ESPHome ≥ 2025.5 renamed SELECT_SCHEMA (constant) ➜ select_schema() (function)
-# Support both for compatibility
-# ---------------------------------------------------------------------------
-if hasattr(select, "select_schema"):
-    _SELECT_SCHEMA_BASE = select.select_schema()      # New helper
-else:
-    _SELECT_SCHEMA_BASE = select.SELECT_SCHEMA        # Legacy helper
-
 DEPENDENCIES = ["uart"]
 AUTO_LOAD = ["sensor", "select"]
 
@@ -35,7 +26,26 @@ ToshibaClimateUart = toshiba_ns.class_("ToshibaClimateUart", cg.PollingComponent
 ToshibaPwrModeSelect = toshiba_ns.class_('ToshibaPwrModeSelect', select.Select)
 ToshibaSpecialModeSelect = toshiba_ns.class_('ToshibaSpecialModeSelect', select.Select)
 
-CONFIG_SCHEMA = climate.CLIMATE_SCHEMA.extend(
+# Version-compatible schema selection
+def get_climate_schema():
+    """Get climate schema compatible with both old and new ESPHome versions"""
+    if hasattr(climate, 'climate_schema'):
+        # New way (ESPHome 2025.05+)
+        return climate.climate_schema()
+    else:
+        # Old way (ESPHome < 2025.11)
+        return climate.CLIMATE_SCHEMA
+
+def get_select_schema():
+    """Get select schema compatible with both old and new ESPHome versions"""
+    if hasattr(select, 'select_schema'):
+        # New way (ESPHome 2025.05+)
+        return select.select_schema()
+    else:
+        # Old way (ESPHome < 2025.11)
+        return select.SELECT_SCHEMA
+
+CONFIG_SCHEMA = get_climate_schema().extend(
     {
         cv.GenerateID(): cv.declare_id(ToshibaClimateUart),
         cv.Optional(CONF_OUTDOOR_TEMP): sensor.sensor_schema(
@@ -44,12 +54,12 @@ CONFIG_SCHEMA = climate.CLIMATE_SCHEMA.extend(
                 device_class=DEVICE_CLASS_TEMPERATURE,
                 state_class=STATE_CLASS_MEASUREMENT,
             ),
-        cv.Optional(CONF_PWR_SELECT):_SELECT_SCHEMA_BASE.extend({
+        cv.Optional(CONF_PWR_SELECT): get_select_schema().extend({
             cv.GenerateID(): cv.declare_id(ToshibaPwrModeSelect),
         }),
         cv.Optional(FEATURE_HORIZONTAL_SWING): cv.boolean,
         cv.Optional(DISABLE_WIFI_LED): cv.boolean,
-        cv.Optional(CONF_SPECIAL_MODE): _SELECT_SCHEMA_BASE.extend({
+        cv.Optional(CONF_SPECIAL_MODE): get_select_schema().extend({
             cv.GenerateID(): cv.declare_id(ToshibaSpecialModeSelect),
             cv.Required(CONF_SPECIAL_MODE_MODES): cv.ensure_list(cv.one_of("Standard","Hi POWER","ECO","Fireplace 1","Fireplace 2","8 degrees","Silent#1","Silent#2","Sleep","Floor","Comfort"))
         }),
