@@ -145,6 +145,88 @@ const std::string IntToSpecialMode(SPECIAL_MODE mode) {
   }
 }
 
+// New conversion functions for air quality mode
+const optional<AIR_QUALITY_MODE> StringToAirQualityMode(const std::string &mode) {
+  if (str_equals_case_insensitive(mode, AIR_QUALITY_OFF)) {
+    return AIR_QUALITY_MODE::OFF;
+  } else if (str_equals_case_insensitive(mode, AIR_QUALITY_ION)) {
+    return AIR_QUALITY_MODE::ION;
+  } else if (str_equals_case_insensitive(mode, AIR_QUALITY_PURE)) {
+    return AIR_QUALITY_MODE::PURE;
+  } else if (str_equals_case_insensitive(mode, AIR_QUALITY_AUTO)) {
+    return AIR_QUALITY_MODE::AUTO;
+  } else {
+    return nullopt;
+  }
+}
+
+const std::string IntToAirQualityMode(AIR_QUALITY_MODE mode) {
+  switch (mode) {
+    case AIR_QUALITY_MODE::OFF:
+      return AIR_QUALITY_OFF;
+    case AIR_QUALITY_MODE::ION:
+      return AIR_QUALITY_ION;
+    case AIR_QUALITY_MODE::PURE:
+      return AIR_QUALITY_PURE;
+    case AIR_QUALITY_MODE::AUTO:
+      return AIR_QUALITY_AUTO;
+    default:
+      return "Unknown";
+  }
+}
+
+// Display brightness conversion functions
+const optional<DISPLAY_BRIGHTNESS> StringToDisplayBrightness(const std::string &mode) {
+  if (str_equals_case_insensitive(mode, DISPLAY_OFF)) {
+    return DISPLAY_BRIGHTNESS::OFF;
+  } else if (str_equals_case_insensitive(mode, DISPLAY_DIM)) {
+    return DISPLAY_BRIGHTNESS::DIM;
+  } else if (str_equals_case_insensitive(mode, DISPLAY_BRIGHT)) {
+    return DISPLAY_BRIGHTNESS::BRIGHT;
+  } else {
+    return nullopt;
+  }
+}
+
+const std::string IntToDisplayBrightness(DISPLAY_BRIGHTNESS mode) {
+  switch (mode) {
+    case DISPLAY_BRIGHTNESS::OFF:
+      return DISPLAY_OFF;
+    case DISPLAY_BRIGHTNESS::DIM:
+      return DISPLAY_DIM;
+    case DISPLAY_BRIGHTNESS::BRIGHT:
+      return DISPLAY_BRIGHT;
+    default:
+      return "Unknown";
+  }
+}
+
+// Dry level conversion functions
+const optional<DRY_LEVEL> StringToDryLevel(const std::string &mode) {
+  if (str_equals_case_insensitive(mode, DRY_LEVEL_LOW)) {
+    return DRY_LEVEL::LOW;
+  } else if (str_equals_case_insensitive(mode, DRY_LEVEL_MEDIUM)) {
+    return DRY_LEVEL::MEDIUM;
+  } else if (str_equals_case_insensitive(mode, DRY_LEVEL_HIGH)) {
+    return DRY_LEVEL::HIGH;
+  } else {
+    return nullopt;
+  }
+}
+
+const std::string IntToDryLevel(DRY_LEVEL mode) {
+  switch (mode) {
+    case DRY_LEVEL::LOW:
+      return DRY_LEVEL_LOW;
+    case DRY_LEVEL::MEDIUM:
+      return DRY_LEVEL_MEDIUM;
+    case DRY_LEVEL::HIGH:
+      return DRY_LEVEL_HIGH;
+    default:
+      return "Unknown";
+  }
+}
+
 const SWING ClimateSwingModeToInt(climate::ClimateSwingMode mode) {
   switch (mode) {
     case climate::CLIMATE_SWING_OFF:
