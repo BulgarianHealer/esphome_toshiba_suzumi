@@ -8,17 +8,6 @@ from esphome.const import (
     DEVICE_CLASS_TEMPERATURE,
     UNIT_HOUR,
     DEVICE_CLASS_DURATION,
-    ICON_TIMER,
-    ICON_FAN,
-    ICON_LIGHTBULB,
-    ICON_RESTART,
-    ICON_VOLUME_HIGH,
-    ICON_WASHING_MACHINE,
-    ICON_FILTER,
-    ICON_BRIGHTNESS_5,
-    ICON_WATER_PERCENT,
-    ICON_SPEEDOMETER,
-    ICON_ALERT_CIRCLE,
     ENTITY_CATEGORY_CONFIG,
     ENTITY_CATEGORY_DIAGNOSTIC
 )
@@ -111,21 +100,21 @@ def get_switch_schema():
     if hasattr(switch, 'switch_schema'):
         return switch.switch_schema(switch.Switch)
     else:
-        return switch.SWITCH_SCHEMA
+        return switch.SWITCH_SCHEMA if hasattr(switch, 'SWITCH_SCHEMA') else {}
 
 def get_button_schema():
     """Get button schema compatible with both old and new ESPHome versions"""
     if hasattr(button, 'button_schema'):
         return button.button_schema(button.Button)
     else:
-        return button.BUTTON_SCHEMA
+        return button.BUTTON_SCHEMA if hasattr(button, 'BUTTON_SCHEMA') else {}
 
 def get_number_schema():
     """Get number schema compatible with both old and new ESPHome versions"""
     if hasattr(number, 'number_schema'):
         return number.number_schema(number.Number)
     else:
-        return number.NUMBER_SCHEMA
+        return number.NUMBER_SCHEMA if hasattr(number, 'NUMBER_SCHEMA') else {}
 
 CONFIG_SCHEMA = get_climate_schema().extend(
     {
@@ -145,7 +134,7 @@ CONFIG_SCHEMA = get_climate_schema().extend(
             accuracy_decimals=0,
             device_class=DEVICE_CLASS_DURATION,
             state_class=STATE_CLASS_MEASUREMENT,
-            icon=ICON_FILTER,
+            icon="mdi:filter",
             entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
         ),
         cv.Optional(CONF_OPERATING_HOURS): sensor.sensor_schema(
@@ -153,17 +142,17 @@ CONFIG_SCHEMA = get_climate_schema().extend(
             accuracy_decimals=0,
             device_class=DEVICE_CLASS_DURATION,
             state_class=STATE_CLASS_MEASUREMENT,
-            icon=ICON_SPEEDOMETER,
+            icon="mdi:speedometer",
             entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
         ),
         
         # Text sensors
         cv.Optional(CONF_ERROR_CODE): text_sensor.text_sensor_schema(
-            icon=ICON_ALERT_CIRCLE,
+            icon="mdi:alert-circle",
             entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
         ),
         cv.Optional(CONF_TIMER_STATUS): text_sensor.text_sensor_schema(
-            icon=ICON_TIMER,
+            icon="mdi:timer",
             entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
         ),
         
