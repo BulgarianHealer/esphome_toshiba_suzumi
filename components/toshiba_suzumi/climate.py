@@ -8,6 +8,15 @@ from esphome.const import (
     DEVICE_CLASS_TEMPERATURE
 )
 
+# ---------------------------------------------------------------------------
+# ESPHome ≥ 2025.5 renamed SELECT_SCHEMA (constant) ➜ select_schema() (function)
+# Support both for compatibility
+# ---------------------------------------------------------------------------
+if hasattr(select, "select_schema"):
+    _SELECT_SCHEMA_BASE = select.select_schema()      # New helper
+else:
+    _SELECT_SCHEMA_BASE = select.SELECT_SCHEMA        # Legacy helper
+
 DEPENDENCIES = ["uart"]
 AUTO_LOAD = ["sensor", "select"]
 
@@ -35,12 +44,12 @@ CONFIG_SCHEMA = climate.CLIMATE_SCHEMA.extend(
                 device_class=DEVICE_CLASS_TEMPERATURE,
                 state_class=STATE_CLASS_MEASUREMENT,
             ),
-        cv.Optional(CONF_PWR_SELECT): select.SELECT_SCHEMA.extend({
+        cv.Optional(CONF_PWR_SELECT):_SELECT_SCHEMA_BASE.extend({
             cv.GenerateID(): cv.declare_id(ToshibaPwrModeSelect),
         }),
         cv.Optional(FEATURE_HORIZONTAL_SWING): cv.boolean,
         cv.Optional(DISABLE_WIFI_LED): cv.boolean,
-        cv.Optional(CONF_SPECIAL_MODE): select.SELECT_SCHEMA.extend({
+        cv.Optional(CONF_SPECIAL_MODE): _SELECT_SCHEMA_BASE.extend({
             cv.GenerateID(): cv.declare_id(ToshibaSpecialModeSelect),
             cv.Required(CONF_SPECIAL_MODE_MODES): cv.ensure_list(cv.one_of("Standard","Hi POWER","ECO","Fireplace 1","Fireplace 2","8 degrees","Silent#1","Silent#2","Sleep","Floor","Comfort"))
         }),
