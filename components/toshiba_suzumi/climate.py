@@ -30,8 +30,8 @@ ToshibaSpecialModeSelect = toshiba_ns.class_('ToshibaSpecialModeSelect', select.
 def get_climate_schema():
     """Get climate schema compatible with both old and new ESPHome versions"""
     if hasattr(climate, 'climate_schema'):
-        # New way (ESPHome 2025.05+)
-        return climate.climate_schema()
+        # New way (ESPHome 2025.05+) - requires class parameter
+        return climate.climate_schema(climate.Climate)
     else:
         # Old way (ESPHome < 2025.11)
         return climate.CLIMATE_SCHEMA
@@ -39,8 +39,8 @@ def get_climate_schema():
 def get_select_schema():
     """Get select schema compatible with both old and new ESPHome versions"""
     if hasattr(select, 'select_schema'):
-        # New way (ESPHome 2025.05+)
-        return select.select_schema()
+        # New way (ESPHome 2025.05+) - requires class parameter
+        return select.select_schema(select.Select)
     else:
         # Old way (ESPHome < 2025.11)
         return select.SELECT_SCHEMA
